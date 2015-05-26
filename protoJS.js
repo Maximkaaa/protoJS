@@ -1,9 +1,10 @@
 (function() {
+    'use strict';
 
     var proto = function(options) {
 
         var constructor = function() {
-            if (!(this instanceof contructor)) {
+            if (!(this instanceof constructor)) {
                 return new options._construct();
             } else {
                 options._construct.apply(this, arguments);
@@ -39,7 +40,7 @@
 
     function setProperty(obj, key, value) {
         if (value instanceof Object) {
-            if (value.set || value.get) {
+            if (value.set !== undefined || value.get !== undefined) {
                 setFunc(obj, key, value);
             } else if (typeof value === 'function') {
                 setMethod(obj, key, value);
@@ -84,7 +85,7 @@
 
 
     if (typeof define === 'function' && define.amd) {
-        define(function() { return rbush; });
+        define(function() { return proto; });
     } else if (typeof module !== 'undefined') {
         module.exports = proto;
     } else {
