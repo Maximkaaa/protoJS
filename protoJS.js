@@ -38,6 +38,18 @@
         }
     };
 
+    /**
+     * Copies the properties from the options object to the object
+     * @param {Object} obj - target object
+     * @param {Object} options - source object
+     */
+    proto.init = function(obj, options) {
+        var keys = Object.keys(options);
+        for (var i = 0; i < keys.length; i++) {
+            obj[keys[i]] = options[keys[i]];
+        }
+    };
+
     function setProperty(obj, key, value) {
         if (value instanceof Object) {
             if (value.set !== undefined || value.get !== undefined) {
