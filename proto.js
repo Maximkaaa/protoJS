@@ -2,6 +2,7 @@
     'use strict';
 
     var proto = function(options) {
+        if (!options._contstruct) options._construct = function() {};
 
         var constructor = function() {
             if (!(this instanceof constructor)) {
@@ -11,7 +12,13 @@
             }
         };
 
-        if (options._proto) constructor.prototype = options._proto;
+        if (options._proto) {
+            if (options._proto instanceof Function) {
+                constructor.prototype = new options._proto();
+            } else {
+                constructor.prototype = options._proto;
+            }
+        }
         if (options._mixin) {
             proto.mixin(constructor.prototype, options._mixin);
         }
