@@ -2,13 +2,16 @@
     'use strict';
 
     var proto = function(options) {
-        if (!options._contstruct) options._construct = function() {};
+        if (!options._construct) options._construct = function() {};
 
         var constructor = function() {
-            if (!(this instanceof constructor)) {
-                return new options._construct();
-            } else {
+            if (this instanceof constructor) {
                 options._construct.apply(this, arguments);
+            } else {
+                var F = function(arg) { return constructor.apply(this, arg); };
+                F.prototype = constructor.prototype;
+
+                return new F(arguments);
             }
         };
 
