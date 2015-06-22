@@ -1,20 +1,7 @@
 (function() {
     'use strict';
 
-    var proto = function(options) {
-        if (!options._construct) options._construct = function() {};
-
-        var constructor = function() {
-            if (this instanceof constructor) {
-                options._construct.apply(this, arguments);
-            } else {
-                var F = function(arg) { return constructor.apply(this, arg); };
-                F.prototype = constructor.prototype;
-
-                return new F(arguments);
-            }
-        };
-
+    var proto = function(constructor, options) {
         if (options._proto) {
             if (options._proto instanceof Function) {
                 constructor.prototype = new options._proto();
@@ -32,8 +19,6 @@
                 setProperty(constructor.prototype, keys[i], options[keys[i]]);
             }
         }
-
-        return constructor;
     };
 
     /**
