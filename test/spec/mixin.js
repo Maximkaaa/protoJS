@@ -37,6 +37,22 @@ describe('mixins', function() {
             expect(desc.writable).toBe(true);
         });
 
+        it('should copy the getter/setter properties', function() {
+            expect(obj.g).toBe(mixin.g);
+            expect(obj.s).toBe(mixin.s);
+
+            mixin.s = 10;
+            expect(obj.s).not.toBe(mixin.s);
+        });
+
+        it('should keep the getter/setter properties enumerable, not writable', function() {
+            var desc = Object.getOwnPropertyDescriptor(obj, 'g');
+            expect(typeof desc.get).toBe('function');
+            expect(desc.set).toBe(undefined);
+            expect(desc.enumerable).toBe(true);
+            expect(desc.writable).toBeFalsy();
+        });
+
     });
 
 });
