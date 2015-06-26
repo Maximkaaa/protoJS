@@ -78,7 +78,7 @@
     function getSetter(key) {
         return function(value) {
             if (!this.hasOwnProperty('_' + key)) setValue(this, '_' + key, null, true);
-            this[' ' + key] = value;
+            this['_' + key] = value;
         };
     }
 
