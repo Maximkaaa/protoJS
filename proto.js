@@ -2,6 +2,11 @@
     'use strict';
 
     var proto = function(constructor, options) {
+        if (arguments.length === 1) {
+            options = constructor;
+            constructor = function() {};
+        }
+
         if (options._proto) {
             if (options._proto instanceof Function) {
                 constructor.prototype = new options._proto();
@@ -19,6 +24,8 @@
                 setProperty(constructor.prototype, keys[i], options[keys[i]]);
             }
         }
+
+        return constructor.prototype;
     };
 
     /**
@@ -27,9 +34,15 @@
      * @param source
      */
     proto.mixin = function(target, source) {
-        var keys = Object.keys(source);
+        var keys = Object.getOwnPropertyNames(source);
         for (var i = 0; i < keys.length; i++) {
-            setMethod(target, keys[i], source[keys[i]]);
+            var desc = Object.getOwnPropertyDescriptor(source, keys[i]);
+            if (desc.set || desc.get) {
+                setFunc(target, keys[i], {get: desc.get || null, set: desc.set || null, default: source[keys[i]]});
+            } else if (typeof source[keys[i]] === 'function' || desc.enumerable) {
+                setProperty(target, keys[i], source[keys[i]]);
+            }
+            //setMethod(target, keys[i], source[keys[i]]);
         }
     };
 
