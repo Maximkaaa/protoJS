@@ -28,7 +28,7 @@
         }
 
         var keys = Object.keys(options);
-        for (var i = 0; i < keys.length; i++) {
+        for (i = 0; i < keys.length; i++) {
             if (keys[i] !== '_construct' && keys[i] !== '_proto' && keys[i] !== '_mixin') {
                 setProperty(constructor.prototype, keys[i], options[keys[i]]);
             }
