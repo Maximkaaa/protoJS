@@ -29,9 +29,7 @@
 
         var keys = Object.keys(options);
         for (i = 0; i < keys.length; i++) {
-            if (keys[i] !== '_construct' && keys[i] !== '_proto' && keys[i] !== '_mixin') {
-                setProperty(constructor.prototype, keys[i], options[keys[i]]);
-            }
+            setProperty(constructor.prototype, keys[i], options[keys[i]]);
         }
 
         return constructor.prototype;
@@ -51,7 +49,6 @@
             } else if (typeof source[keys[i]] === 'function' || desc.enumerable) {
                 setProperty(target, keys[i], source[keys[i]]);
             }
-            //setMethod(target, keys[i], source[keys[i]]);
         }
     };
 
@@ -82,7 +79,7 @@
     }
 
     function setFunc(obj, key, value) {
-        if (value.default) setValue(obj, '_' + key, value.default, true);
+        if (value.default !== undefined) setValue(obj, '_' + key, value.default, true);
 
         Object.defineProperty(obj, key, {
             get: value.get ? value.get : value.get !== null ? getGetter(key) : undefined,
