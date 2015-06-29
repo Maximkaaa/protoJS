@@ -1,10 +1,16 @@
 (function() {
     'use strict';
 
-    var proto = function(constructor, options) {
+    var proto = function(constructor, mixins, options) {
         if (arguments.length === 1) {
             options = constructor;
             constructor = function() {};
+        } else if (arguments.length === 2) {
+            options = mixins;
+        } else {
+            if (!(mixins instanceof Array)) {
+                mixins = [mixins];
+            }
         }
 
         if (options._proto) {
@@ -14,8 +20,11 @@
                 constructor.prototype = options._proto;
             }
         }
-        if (options._mixin) {
-            proto.mixin(constructor.prototype, options._mixin);
+
+        if (mixins) {
+            for (var i = 0; i < mixins.length; i++) {
+                proto.mixin(constructor.prototype, mixins[i]);
+            }
         }
 
         var keys = Object.keys(options);

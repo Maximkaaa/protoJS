@@ -53,6 +53,41 @@ describe('mixins', function() {
             expect(desc.writable).toBeFalsy();
         });
 
+        //TODO: test for mixin of already existing properties
+    });
+
+    describe('mixin in proto function', function() {
+
+        var Class, mixin;
+        beforeEach(function() {
+            Class = function() {};
+            mixin = proto({
+                f: function() {},
+                n: 1,
+                t: 'a',
+                g: {default: '2', set: null},
+                s: {default: '3', set: function(v) { this._s = v * 2; }}
+            });
+        });
+
+        it('should mixin the second argument object to the prototype of the first argument if there are 3 arguments in proto function call', function() {
+            proto(Class, mixin, {});
+            expect(Class.prototype.n).toBe(1);
+            expect(Class.prototype.f).toBe(mixin.f);
+        });
+
+        it('should mixin all the mixins in array', function() {
+            var mixin2 = proto({
+                n1: 2,
+                f2: function() {}
+            });
+
+            proto(Class, [mixin, mixin2], {});
+            expect(Class.prototype.n).toBe(1);
+            expect(Class.prototype.f).toBe(mixin.f);
+            expect(Class.prototype.n1).toBe(2);
+            expect(Class.prototype.f2).toBe(mixin2.f2);
+        });
     });
 
 });
